@@ -3,190 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Great Personalities</title>
-    
+    <title>The Hall of Greats</title>
     <style>
+        /* --- 1. PREMIUM THEME & VARIABLES --- */
         :root {
-            --primary: #2c3e50;
-            --bg: #f8f9fa;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-gold: #fbbf24;
+            --accent-hover: #f59e0b;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: var(--bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            overflow-x: hidden;
         }
 
-        /* --- HOME PAGE STYLES --- */
-        #home-page {
-            display: block; /* Visible by default */
+        /* --- 2. KEYFRAME ANIMATIONS --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- 3. HOME PAGE STYLES --- */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            padding: 60px 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1 {
+            color: var(--accent-gold);
+            font-size: 3rem;
+            margin: 0 0 15px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         #searchBar {
-            width: 80%;
-            max-width: 400px;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 2px solid #334155;
+            background: #0f172a;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        #searchBar:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
         }
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: auto;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto 60px auto;
+            padding: 0 20px;
         }
 
+        /* --- 4. CARD ANIMATIONS & DESIGN --- */
         .card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            text-align: center;
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
             cursor: pointer;
-            transition: transform 0.2s;
+            border-bottom: 4px solid transparent;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* Initial state for animation */
+            opacity: 0; 
+            animation: fadeInUp 0.8s ease-out forwards;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
         }
 
         .card:hover {
-            transform: scale(1.05);
+            transform: translateY(-15px) scale(1.02);
+            border-bottom: 4px solid var(--accent-gold);
         }
 
-        /* --- INFORMATION PAGE STYLES --- */
+        .card h3 {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- 5. INFORMATION PAGE STYLES --- */
         #information-page {
-            display: none; /* Hidden by default */
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: none;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
         }
 
         .back-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            background: transparent;
+            color: var(--accent-gold);
+            border: 2px solid var(--accent-gold);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            margin-bottom: 20px;
+            transition: all 0.3s;
+            margin-bottom: 30px;
         }
 
         .back-btn:hover {
-            background-color: #1a252f;
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            transform: translateX(-5px);
+        }
+
+        .info-header {
+            border-bottom: 2px solid #334155;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         #info-title {
-            color: var(--primary);
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            color: var(--accent-gold);
+            font-size: 3.5rem;
+            margin: 0;
         }
+
+        #info-years {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .timeline-event {
+            background: #0f172a;
+            padding: 15px 20px;
+            border-left: 4px solid var(--accent-gold);
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: transform 0.3s;
+        }
+
+        .timeline-event:hover {
+            transform: translateX(10px);
+        }
+
     </style>
 </head>
 <body>
 
     <div id="home-page">
         <header>
-            <h1>Great Personalities Archive</h1>
-            <input type="text" id="searchBar" placeholder="Search a name...">
+            <h1>The Hall of Greats</h1>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Discover the architects of human history</p>
+            <input type="text" id="searchBar" placeholder="Search by name (e.g., Einstein, Gandhi)...">
         </header>
         <main id="personGrid" class="grid-container">
             </main>
     </div>
 
-
     <div id="information-page">
-        <button class="back-btn" onclick="goBack()">← Back to Home</button>
-        <h1 id="info-title">Name Goes Here</h1>
-        <h3 id="info-summary" style="color: gray;">Summary Goes Here</h3>
-        <hr>
-        <h2>Detailed History & Events</h2>
-        <p id="info-details">Full detail text goes here...</p>
+        <button class="back-btn" onclick="goBack()">← Return to Gallery</button>
+        
+        <div class="info-header">
+            <h1 id="info-title">Name</h1>
+            <p id="info-years">Lifespan</p>
+        </div>
+
+        <h2 style="color: var(--text-main);">Biography</h2>
+        <p id="info-details" style="line-height: 1.8; color: var(--text-muted); font-size: 1.1rem;"></p>
+
+        <h2 style="color: var(--text-main); margin-top: 40px;">Key Events</h2>
+        <div id="info-timeline">
+            </div>
     </div>
 
-
     <script>
-        // --- 1. THE DATA (Add your 100+ people here) ---
+        // --- 1. THE DEEP DATA (Add up to 100 here) ---
         const personalities = [
             {
                 id: "mandela",
                 name: "Nelson Mandela",
-                summary: "Anti-apartheid revolutionary and political leader.",
-                details: "Nelson Mandela served as the first president of South Africa from 1994 to 1999. He spent 27 years in prison for his fight against apartheid. Upon his release, he negotiated the end of apartheid and became a global symbol of peace and forgiveness."
+                years: "1918 - 2013",
+                summary: "Anti-apartheid revolutionary, political leader, and philanthropist.",
+                details: "Nelson Rolihlahla Mandela was a South African anti-apartheid revolutionary and political leader who served as the first president of South Africa from 1994 to 1999. He was the country's first black head of state and the first elected in a fully representative democratic election. His government focused on dismantling the legacy of apartheid by tackling institutionalized racism and fostering racial reconciliation. Ideologically an African nationalist and socialist, he served as the president of the African National Congress (ANC) party from 1991 to 1997.",
+                events: [
+                    "1944: Joined the African National Congress (ANC).",
+                    "1964: Sentenced to life imprisonment during the Rivonia Trial.",
+                    "1990: Released from prison after 27 years.",
+                    "1993: Awarded the Nobel Peace Prize.",
+                    "1994: Inaugurated as South Africa's first black president."
+                ]
             },
             {
                 id: "gandhi",
                 name: "Mahatma Gandhi",
-                summary: "Leader of the Indian independence movement.",
-                details: "Mohandas Karamchand Gandhi employed nonviolent resistance to lead the successful campaign for India's independence from British rule. His methods inspired civil rights and freedom movements across the world, including those led by Martin Luther King Jr. and Nelson Mandela."
+                years: "1869 - 1948",
+                summary: "Leader of the Indian independence movement against British rule.",
+                details: "Mohandas Karamchand Gandhi was an Indian lawyer, anti-colonial nationalist, and political ethicist, who employed nonviolent resistance to lead the successful campaign for India's independence from British rule, and in turn inspired movements for civil rights and freedom across the world. The honorific Mahātmā (Sanskrit: 'great-souled', 'venerable'), first applied to him in 1914 in South Africa, is now used throughout the world.",
+                events: [
+                    "1893: Thrown off a train in South Africa, sparking his civil rights activism.",
+                    "1915: Returned to India to join the independence movement.",
+                    "1930: Led the famous Salt March protesting the British salt monopoly.",
+                    "1942: Launched the Quit India Movement.",
+                    "1947: India officially achieves independence."
+                ]
+            },
+            {
+                id: "einstein",
+                name: "Albert Einstein",
+                years: "1879 - 1955",
+                summary: "Theoretical physicist widely acknowledged as one of the greatest physicists of all time.",
+                details: "Albert Einstein is best known for developing the theory of relativity, but he also made important contributions to the development of the theory of quantum mechanics. Relativity and quantum mechanics are together the two pillars of modern physics. His mass–energy equivalence formula E = mc2, which arises from relativity theory, has been dubbed 'the world's most famous equation'.",
+                events: [
+                    "1905: Published four groundbreaking papers (his 'Miracle Year').",
+                    "1915: Completed the General Theory of Relativity.",
+                    "1921: Awarded the Nobel Prize in Physics for his explanation of the photoelectric effect.",
+                    "1933: Emigrated to the United States to flee the Nazi regime.",
+                    "1939: Signed a letter to President Roosevelt urging nuclear research."
+                ]
+            },
+            {
+                id: "curie",
+                name: "Marie Curie",
+                years: "1867 - 1934",
+                summary: "Physicist and chemist who conducted pioneering research on radioactivity.",
+                details: "Marie Salomea Skłodowska Curie was a Polish and naturalized-French physicist and chemist. She was the first woman to win a Nobel Prize, the first person and the only woman to win the Nobel Prize twice, and the only person to win the Nobel Prize in two scientific fields. Her husband, Pierre Curie, was a co-winner of her first Nobel Prize, making them the first-ever married couple to win the Nobel Prize and launching the Curie family legacy of five Nobel Prizes.",
+                events: [
+                    "1898: Discovered the elements polonium and radium.",
+                    "1903: Won the Nobel Prize in Physics (shared with Pierre Curie and Henri Becquerel).",
+                    "1906: Took over Pierre's teaching post, becoming the first female professor at the University of Paris.",
+                    "1911: Won the Nobel Prize in Chemistry.",
+                    "1914: Developed mobile radiography units for WWI field hospitals."
+                ]
             },
             {
                 id: "lincoln",
                 name: "Abraham Lincoln",
-                summary: "16th U.S. President who abolished slavery.",
-                details: "Lincoln led the United States through the American Civil War, preserving the Union and abolishing slavery with the Emancipation Proclamation. He is remembered for his Gettysburg Address and his profound impact on American history."
+                years: "1809 - 1865",
+                summary: "16th U.S. President who preserved the Union and abolished slavery.",
+                details: "Abraham Lincoln was an American lawyer and statesman who served as the 16th president of the United States from 1861 until his assassination in 1865. Lincoln led the nation through the American Civil War and succeeded in preserving the Union, abolishing slavery, bolstering the federal government, and modernizing the U.S. economy. He was born into poverty in a log cabin and was raised on the frontier.",
+                events: [
+                    "1860: Elected as the 16th President of the United States.",
+                    "1861: The American Civil War begins.",
+                    "1863: Issued the Emancipation Proclamation and delivered the Gettysburg Address.",
+                    "1864: Re-elected to the presidency.",
+                    "1865: Assassinated by John Wilkes Booth at Ford's Theatre."
+                ]
             }
         ];
 
-        // --- 2. GETTING ELEMENTS FROM THE SCREEN ---
+        // --- 2. DOM ELEMENTS ---
         const grid = document.getElementById('personGrid');
         const searchBar = document.getElementById('searchBar');
         const homePage = document.getElementById('home-page');
         const infoPage = document.getElementById('information-page');
 
-        // Elements on the Info Page
-        const infoTitle = document.getElementById('info-title');
-        const infoSummary = document.getElementById('info-summary');
-        const infoDetails = document.getElementById('info-details');
-
-        // --- 3. DRAW THE CARDS ON THE HOME PAGE ---
+        // --- 3. RENDER CARDS WITH STAGGERED ANIMATION ---
         function displayPeople(data) {
-            grid.innerHTML = data.map(person => `
-                <div class="card" onclick="openInformation('${person.id}')">
+            grid.innerHTML = ''; // Clear existing
+            
+            data.forEach((person, index) => {
+                // Calculate animation delay for stagger effect
+                const delay = index * 0.1; 
+                
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.animationDelay = `${delay}s`; // Apply staggered delay
+                card.onclick = () => openInformation(person.id);
+                
+                card.innerHTML = `
                     <h3>${person.name}</h3>
-                    <p style="font-size: 0.9em; color: #555;">${person.summary}</p>
-                </div>
-            `).join('');
+                    <p><strong>${person.years}</strong></p>
+                    <p style="font-size: 0.9em;">${person.summary}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
         }
 
-        // --- 4. SWITCH TO INFORMATION PAGE ---
+        // --- 4. OPEN DETAILED VIEW WITH ANIMATIONS ---
         function openInformation(id) {
-            // Find the specific person in our data array
             const person = personalities.find(p => p.id === id);
 
-            // Fill the Information Page with their specific data
-            infoTitle.innerText = person.name;
-            infoSummary.innerText = person.summary;
-            infoDetails.innerText = person.details;
+            document.getElementById('info-title').innerText = person.name;
+            document.getElementById('info-years').innerText = person.years;
+            document.getElementById('info-details').innerText = person.details;
 
-            // Hide the Home Page and Show the Information Page
+            // Generate Timeline Events
+            const timeline = document.getElementById('info-timeline');
+            timeline.innerHTML = person.events.map((event, index) => `
+                <div class="timeline-event" style="animation: slideInRight 0.5s ease forwards; opacity: 0; animation-delay: ${index * 0.15}s;">
+                    ${event}
+                </div>
+            `).join('');
+
+            // Page Transition
             homePage.style.display = 'none';
             infoPage.style.display = 'block';
+            infoPage.style.animation = 'fadeInUp 0.6s ease-out';
+            window.scrollTo(0,0); // Scroll to top
         }
 
-        // --- 5. SWITCH BACK TO HOME PAGE ---
+        // --- 5. GO BACK TO HOME ---
         function goBack() {
-            // Hide the Information Page and Show the Home Page
             infoPage.style.display = 'none';
             homePage.style.display = 'block';
+            homePage.style.animation = 'fadeInDown 0.6s ease-out';
+            searchBar.value = ''; // Clear search
+            displayPeople(personalities); // Reset grid
         }
 
-        // --- 6. SEARCH BAR LOGIC ---
+        // --- 6. SEARCH FUNCTIONALITY ---
         searchBar.addEventListener('keyup', (e) => {
             const searchString = e.target.value.toLowerCase();
-            const filtered = personalities.filter(p => p.name.toLowerCase().includes(searchString));
+            const filtered = personalities.filter(p => 
+                p.name.toLowerCase().includes(searchString) || 
+                p.summary.toLowerCase().includes(searchString)
+            );
             displayPeople(filtered);
         });
 
-        // --- 7. START THE APP ---
-        displayPeople(personalities); // Run this once when the page loads
+        // --- 7. INITIALIZE ---
+        displayPeople(personalities);
     </script>
 </body>
 </html>
