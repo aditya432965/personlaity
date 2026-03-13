@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Personalities</title>
+    
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --bg: #f8f9fa;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- HOME PAGE STYLES --- */
+        #home-page {
+            display: block; /* Visible by default */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #searchBar {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- INFORMATION PAGE STYLES --- */
+        #information-page {
+            display: none; /* Hidden by default */
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .back-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #1a252f;
+        }
+
+        #info-title {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home-page">
+        <header>
+            <h1>Great Personalities Archive</h1>
+            <input type="text" id="searchBar" placeholder="Search a name...">
+        </header>
+        <main id="personGrid" class="grid-container">
+            </main>
+    </div>
+
+
+    <div id="information-page">
+        <button class="back-btn" onclick="goBack()">← Back to Home</button>
+        <h1 id="info-title">Name Goes Here</h1>
+        <h3 id="info-summary" style="color: gray;">Summary Goes Here</h3>
+        <hr>
+        <h2>Detailed History & Events</h2>
+        <p id="info-details">Full detail text goes here...</p>
+    </div>
+
+
+    <script>
+        // --- 1. THE DATA (Add your 100+ people here) ---
+        const personalities = [
+            {
+                id: "mandela",
+                name: "Nelson Mandela",
+                summary: "Anti-apartheid revolutionary and political leader.",
+                details: "Nelson Mandela served as the first president of South Africa from 1994 to 1999. He spent 27 years in prison for his fight against apartheid. Upon his release, he negotiated the end of apartheid and became a global symbol of peace and forgiveness."
+            },
+            {
+                id: "gandhi",
+                name: "Mahatma Gandhi",
+                summary: "Leader of the Indian independence movement.",
+                details: "Mohandas Karamchand Gandhi employed nonviolent resistance to lead the successful campaign for India's independence from British rule. His methods inspired civil rights and freedom movements across the world, including those led by Martin Luther King Jr. and Nelson Mandela."
+            },
+            {
+                id: "lincoln",
+                name: "Abraham Lincoln",
+                summary: "16th U.S. President who abolished slavery.",
+                details: "Lincoln led the United States through the American Civil War, preserving the Union and abolishing slavery with the Emancipation Proclamation. He is remembered for his Gettysburg Address and his profound impact on American history."
+            }
+        ];
+
+        // --- 2. GETTING ELEMENTS FROM THE SCREEN ---
+        const grid = document.getElementById('personGrid');
+        const searchBar = document.getElementById('searchBar');
+        const homePage = document.getElementById('home-page');
+        const infoPage = document.getElementById('information-page');
+
+        // Elements on the Info Page
+        const infoTitle = document.getElementById('info-title');
+        const infoSummary = document.getElementById('info-summary');
+        const infoDetails = document.getElementById('info-details');
+
+        // --- 3. DRAW THE CARDS ON THE HOME PAGE ---
+        function displayPeople(data) {
+            grid.innerHTML = data.map(person => `
+                <div class="card" onclick="openInformation('${person.id}')">
+                    <h3>${person.name}</h3>
+                    <p style="font-size: 0.9em; color: #555;">${person.summary}</p>
+                </div>
+            `).join('');
+        }
+
+        // --- 4. SWITCH TO INFORMATION PAGE ---
+        function openInformation(id) {
+            // Find the specific person in our data array
+            const person = personalities.find(p => p.id === id);
+
+            // Fill the Information Page with their specific data
+            infoTitle.innerText = person.name;
+            infoSummary.innerText = person.summary;
+            infoDetails.innerText = person.details;
+
+            // Hide the Home Page and Show the Information Page
+            homePage.style.display = 'none';
+            infoPage.style.display = 'block';
+        }
+
+        // --- 5. SWITCH BACK TO HOME PAGE ---
+        function goBack() {
+            // Hide the Information Page and Show the Home Page
+            infoPage.style.display = 'none';
+            homePage.style.display = 'block';
+        }
+
+        // --- 6. SEARCH BAR LOGIC ---
+        searchBar.addEventListener('keyup', (e) => {
+            const searchString = e.target.value.toLowerCase();
+            const filtered = personalities.filter(p => p.name.toLowerCase().includes(searchString));
+            displayPeople(filtered);
+        });
+
+        // --- 7. START THE APP ---
+        displayPeople(personalities); // Run this once when the page loads
+    </script>
+</body>
+</html>
