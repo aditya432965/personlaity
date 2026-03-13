@@ -3,130 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Pantheon | 100 Icons of Humanity</title>
+    <title>The Eternal Archive | AI-Enhanced Museum</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-low: rgba(212, 175, 55, 0.1);
-            --bg: #0a0a0a;
-            --card-bg: #161616;
+            --gold: #C5A059;
+            --bg: #050505;
+            --accent: #1a1a1a;
         }
 
         body {
             background-color: var(--bg);
-            color: #f0f0f0;
-            font-family: 'Inter', sans-serif;
+            color: #d1d1d1;
+            font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #0a0a0a 70%);
         }
 
-        .serif-title { font-family: 'Cinzel', serif; letter-spacing: 0.1em; }
+        .serif { font-family: 'Bodoni Moda', serif; }
 
-        /* Glassmorphism Card */
+        /* Smooth UI Elements */
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
         .personality-card {
-            background: linear-gradient(145deg, #1a1a1a, #111);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .personality-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.05), transparent);
-            transform: translateX(-100%);
-            transition: 0.6s;
+            border-left: 1px solid rgba(197, 160, 89, 0.3);
+            background: linear-gradient(to right, rgba(255,255,255,0.02), transparent);
+            transition: all 0.4s ease;
         }
 
         .personality-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px var(--gold-low);
-        }
-
-        .personality-card:hover::before { transform: translateX(100%); }
-
-        .gold-gradient-text {
-            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            border-left: 1px solid var(--gold);
+            background: rgba(197, 160, 89, 0.05);
+            padding-left: 1.5rem;
         }
 
         .view-transition { display: none; opacity: 0; }
         .active-view { display: block; opacity: 1; }
 
-        .loader {
-            border-top-color: var(--gold);
-            animation: spinner 0.6s linear infinite;
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); }
 
-        @keyframes spinner { to { transform: rotate(360deg); } }
+        .gold-glow { color: var(--gold); text-shadow: 0 0 10px rgba(197, 160, 89, 0.3); }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full z-50 px-10 py-6 flex justify-between items-center backdrop-blur-md border-b border-white/5">
-        <div class="serif-title text-xl font-bold gold-gradient-text cursor-pointer" onclick="showGallery()">THE PANTHEON</div>
-        <div class="w-72 relative">
-            <input type="text" id="searchInput" placeholder="Search the archives..." 
-                class="w-full bg-white/5 border border-white/10 rounded-full py-2 px-5 text-sm focus:outline-none focus:border-[#D4AF37] transition-all">
+    <nav class="fixed top-0 w-full z-50 px-10 py-6 flex flex-col md:flex-row justify-between items-center glass-nav">
+        <div class="serif text-3xl gold-glow mb-4 md:mb-0 cursor-pointer" onclick="showGallery()">ARCHIVE</div>
+        <div class="relative w-full md:w-96">
+            <input type="text" id="searchInput" placeholder="Search or Discover a Name..." 
+                class="search-bar w-full rounded-none py-3 px-6 text-sm outline-none">
+            <div id="externalSearchPrompt" class="hidden absolute top-full left-0 w-full bg-[#111] p-4 border border-t-0 border-[#C5A059]/30 shadow-2xl">
+                <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-2">Not in local records</p>
+                <button id="discoverBtn" class="text-xs gold-glow hover:underline italic">"Summon [Name] from Global History" →</button>
+            </div>
         </div>
     </nav>
 
-    <main class="pt-40 pb-20 px-6 max-w-7xl mx-auto">
+    <main class="pt-48 pb-20 px-10 max-w-6xl mx-auto">
         
         <section id="galleryView" class="view-transition active-view">
-            <div class="text-center mb-24 hero-content">
-                <h2 class="text-xs uppercase tracking-[0.5em] text-gray-500 mb-4">Eternal Registry</h2>
-                <h1 class="text-6xl md:text-8xl serif-title mb-6">Hall of <span class="gold-gradient-text">Greatness</span></h1>
-                <div class="h-1 w-24 bg-[#D4AF37] mx-auto mb-8"></div>
-            </div>
-            
-            <div id="personalityGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div id="personalityGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
                 </div>
         </section>
 
         <section id="bioView" class="view-transition">
-            <button onclick="showGallery()" class="group mb-12 flex items-center gap-3 text-xs uppercase tracking-widest text-gray-400 hover:text-[#D4AF37] transition-colors">
-                <span class="text-xl group-hover:-translate-x-2 transition-transform">←</span> Return to Archive
-            </button>
-            <div id="bioContent"></div>
+            <div id="bioContent" class="max-w-4xl mx-auto">
+                </div>
         </section>
 
     </main>
 
     <script>
-        // 100 Curated Personalities
-        const personalities = [
-            "Albert Einstein", "Leonardo da Vinci", "Isaac Newton", "Marie Curie", "Nikola Tesla", 
-            "Aristotle", "Socrates", "Plato", "Galileo Galilei", "Charles Darwin", 
-            "Ada Lovelace", "Alan Turing", "Stephen Hawking", "Nelson Mandela", "Mahatma Gandhi",
-            "Martin Luther King Jr.", "Abraham Lincoln", "George Washington", "Napoleon", "Julius Caesar",
-            "Alexander the Great", "Genghis Khan", "Cleopatra", "Joan of Arc", "Queen Elizabeth I",
-            "Catherine the Great", "Winston Churchill", "Franklin D. Roosevelt", "Rosa Parks", "Malala Yousafzai",
-            "Mother Teresa", "Dalai Lama", "Confucius", "Buddha", "Jesus", "Muhammad",
-            "William Shakespeare", "Dante Alighieri", "Homer", "Leo Tolstoy", "Mark Twain",
-            "Virginia Woolf", "Jane Austen", "Emily Dickinson", "Vincent van Gogh", "Pablo Picasso",
-            "Michelangelo", "Claude Monet", "Frida Kahlo", "Salvador Dalí", "Andy Warhol",
-            "Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Johann Sebastian Bach", "Frédéric Chopin", "Miles Davis",
-            "Louis Armstrong", "Aretha Franklin", "Bob Dylan", "John Lennon", "Freddie Mercury",
-            "Thomas Edison", "Alexander Graham Bell", "Steve Jobs", "Bill Gates", "Elon Musk",
-            "Henry Ford", "Wright brothers", "Neil Armstrong", "Yuri Gagarin", "Buzz Aldrin",
-            "Christopher Columbus", "Marco Polo", "Ferdinand Magellan", "James Cook", "Roald Amundsen",
-            "Sigmund Freud", "Carl Jung", "Friedrich Nietzsche", "Jean-Paul Sartre", "Simone de Beauvoir",
-            "Adam Smith", "Karl Marx", "John Maynard Keynes", "Coco Chanel", "Christian Dior",
-            "Walt Disney", "Alfred Hitchcock", "Charlie Chaplin", "Marilyn Monroe", "Audrey Hepburn",
-            "Bruce Lee", "Muhammad Ali", "Pelé", "Michael Jordan", "Serena Williams",
-            "Marco Aurelius", "Rumi", "Kahlil Gibran", "Omar Khayyam", "Ibn Battuta"
+        // The core database
+        let personalities = [
+            "Leonardo da Vinci", "Marie Curie", "Albert Einstein", "Nelson Mandela", "Nikola Tesla", "Ada Lovelace", 
+            "Aristotle", "Mahatma Gandhi", "Isaac Newton", "Galileo Galilei", "Frida Kahlo", "Vincent van Gogh", 
+            "William Shakespeare", "Charles Darwin", "Socrates", "Martin Luther King Jr.", "Abraham Lincoln", 
+            "Julius Caesar", "Cleopatra", "Joan of Arc", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven", 
+            "Stephen Hawking", "Alan Turing", "Rosa Parks", "Malala Yousafzai", "Mother Teresa", "Confucius",
+            "Buddha", "Steve Jobs", "Elon Musk", "Neil Armstrong", "Sigmund Freud", "Carl Jung", "Friedrich Nietzsche",
+            "Alexander the Great", "Genghis Khan", "Napoleon", "Winston Churchill", "George Washington", "Marco Polo",
+            "Ibn Battuta", "Rumi", "Srinivasa Ramanujan", "Jane Austen", "Emily Dickinson", "Leo Tolstoy",
+            "Mark Twain", "Virginia Woolf", "Pablo Picasso", "Michelangelo", "Claude Monet", "Salvador Dalí",
+            "Andy Warhol", "Johann Sebastian Bach", "Freddie Mercury", "Miles Davis", "Louis Armstrong",
+            "Aretha Franklin", "Bob Dylan", "John Lennon", "Thomas Edison", "Alexander Graham Bell", "Bill Gates",
+            "Henry Ford", "Wright brothers", "Yuri Gagarin", "Buzz Aldrin", "Christopher Columbus", "James Cook",
+            "Roald Amundsen", "Jean-Paul Sartre", "Simone de Beauvoir", "Adam Smith", "Karl Marx", "Coco Chanel",
+            "Walt Disney", "Alfred Hitchcock", "Charlie Chaplin", "Marilyn Monroe", "Audrey Hepburn", "Bruce Lee",
+            "Muhammad Ali", "Pelé", "Michael Jordan", "Serena Williams", "Marcus Aurelius", "Hypatia", "Turing",
+            "Sappho", "Homer", "Dante", "Cervantes", "Kafka", "Proust", "Joyce", "Borges", "García Márquez"
         ].sort();
 
         const grid = document.getElementById('personalityGrid');
         const searchInput = document.getElementById('searchInput');
+        const externalPrompt = document.getElementById('externalSearchPrompt');
+        const discoverBtn = document.getElementById('discoverBtn');
 
         function init() {
             renderGallery(personalities);
@@ -137,85 +127,102 @@
             grid.innerHTML = '';
             list.forEach((name) => {
                 const card = document.createElement('div');
-                card.className = 'personality-card p-10 rounded-xl text-center flex flex-col items-center justify-center aspect-square';
+                card.className = 'personality-card p-6 cursor-pointer group';
                 card.innerHTML = `
-                    <div class="text-[10px] text-amber-600 font-bold uppercase mb-2 tracking-widest opacity-50">Profile</div>
-                    <h3 class="serif-title text-sm md:text-base leading-tight">${name}</h3>
+                    <h3 class="serif text-2xl group-hover:text-white transition-colors">${name}</h3>
+                    <p class="text-[10px] tracking-[0.3em] text-gray-600 mt-2 uppercase">Historical Archive</p>
                 `;
-                card.onclick = () => fetchAndShowBio(name);
+                card.onclick = () => fetchBio(name);
                 grid.appendChild(card);
             });
-
-            gsap.from(".personality-card", {
-                duration: 1,
-                y: 50,
-                opacity: 0,
-                stagger: 0.02,
-                ease: "expo.out"
-            });
+            gsap.from(".personality-card", { opacity: 0, x: -20, stagger: 0.02 });
         }
 
         function setupSearch() {
             searchInput.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase();
-                const filtered = personalities.filter(p => p.toLowerCase().includes(term));
+                const term = e.target.value.trim();
+                const filtered = personalities.filter(p => p.toLowerCase().includes(term.toLowerCase()));
+                
                 renderGallery(filtered);
+
+                // If no local match, show the "Summon" prompt
+                if (filtered.length === 0 && term.length > 2) {
+                    externalPrompt.classList.remove('hidden');
+                    discoverBtn.innerText = `Summon "${term}" from Global History →`;
+                    discoverBtn.onclick = () => fetchBio(term);
+                } else {
+                    externalPrompt.classList.add('hidden');
+                }
             });
         }
 
-        async function fetchAndShowBio(name) {
+        async function fetchBio(name) {
+            externalPrompt.classList.add('hidden');
             switchView('bioView');
             const container = document.getElementById('bioContent');
-            container.innerHTML = `<div class="flex flex-col items-center justify-center py-40">
-                <div class="loader w-12 h-12 border-4 border-white/10 rounded-full mb-4"></div>
-                <p class="text-xs uppercase tracking-widest gold-text">Retrieving Chronicles...</p>
-            </div>`;
+            
+            // Loading State
+            container.innerHTML = `<div class="serif text-4xl italic opacity-20 animate-pulse text-center py-20">Opening Records for ${name}...</div>`;
 
             try {
                 const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
                 const data = await res.json();
 
+                if (data.type === 'disambiguation' || data.status === 404) {
+                    throw new Error("Not Found");
+                }
+
                 container.innerHTML = `
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                        <div class="lg:col-span-5 relative">
-                            <div class="aspect-[3/4] overflow-hidden rounded-2xl shadow-2xl border border-white/10">
-                                <img src="${data.originalimage ? data.originalimage.source : (data.thumbnail ? data.thumbnail.source : 'https://via.placeholder.com/600x800')}" 
-                                     class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000">
-                            </div>
-                            <div class="absolute -z-10 top-10 -right-10 w-full h-full border border-[#D4AF37]/30 rounded-2xl"></div>
-                        </div>
-                        <div class="lg:col-span-7">
-                            <h2 class="text-6xl md:text-8xl serif-title gold-gradient-text mb-4">${data.title}</h2>
-                            <p class="text-xl text-gray-400 italic mb-8">${data.description || 'Icon of History'}</p>
-                            <p class="text-lg leading-relaxed text-gray-300 font-light mb-10 first-letter:text-5xl first-letter:gold-text first-letter:mr-3 first-letter:float-left first-letter:serif-title">
-                                ${data.extract}
+                    <button onclick="showGallery()" class="text-[10px] tracking-widest uppercase mb-12 opacity-50 hover:opacity-100 hover:text-[#C5A059] transition-all">← Close Archive</button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                        <div class="order-2 md:order-1">
+                            <h1 class="serif text-7xl md:text-8xl mb-6 leading-none">${data.title}</h1>
+                            <p class="text-xs uppercase tracking-[0.5em] gold-glow mb-10">${data.description || 'Global Figure'}</p>
+                            <div class="w-12 h-px bg-[#C5A059] mb-10"></div>
+                            <p class="text-xl leading-relaxed text-gray-400 serif italic mb-10">
+                                "${data.extract}"
                             </p>
-                            <a href="${data.content_urls.desktop.page}" target="_blank" 
-                               class="inline-block px-10 py-4 border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all text-xs uppercase tracking-widest font-bold">
-                                Explore Full Biography
-                            </a>
+                            <a href="${data.content_urls.desktop.page}" target="_blank" class="text-xs border-b border-[#C5A059] pb-1 gold-glow uppercase tracking-widest">Read Original Manuscript</a>
+                        </div>
+                        <div class="order-1 md:order-2 flex justify-center">
+                            <div class="relative w-full max-w-sm">
+                                <img src="${data.originalimage ? data.originalimage.source : (data.thumbnail ? data.thumbnail.source : 'https://via.placeholder.com/600x800')}" 
+                                     class="w-full shadow-2xl sepia-[0.5] hover:sepia-0 transition-all duration-1000">
+                                <div class="absolute inset-0 border border-[#C5A059]/20 translate-x-4 translate-y-4 -z-10"></div>
+                            </div>
                         </div>
                     </div>
                 `;
 
-                gsap.from("#bioContent", { opacity: 0, x: 100, duration: 0.8 });
+                gsap.from("#bioContent", { opacity: 0, y: 30, duration: 1 });
+
             } catch (err) {
-                container.innerHTML = `<p class="text-center py-40 text-red-400">The archives are currently sealed. Please try again later.</p>`;
+                container.innerHTML = `
+                    <div class="text-center py-20">
+                        <h2 class="serif text-4xl mb-4 text-red-900">Record Not Found</h2>
+                        <p class="text-gray-500 mb-8">The name "${name}" does not exist in the digital archives of Wikipedia.</p>
+                        <button onclick="showGallery()" class="gold-glow uppercase text-xs tracking-widest underline">Return to Hall</button>
+                    </div>
+                `;
             }
         }
 
         function switchView(id) {
             document.querySelectorAll('.view-transition').forEach(v => {
-                v.classList.remove('active-view');
                 v.style.display = 'none';
+                v.style.opacity = '0';
             });
-            const target = document.getElementById(id);
-            target.style.display = 'block';
-            setTimeout(() => target.classList.add('active-view'), 10);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const active = document.getElementById(id);
+            active.style.display = 'block';
+            gsap.to(active, { opacity: 1, duration: 0.6 });
+            window.scrollTo(0, 0);
         }
 
-        function showGallery() { switchView('galleryView'); }
+        function showGallery() {
+            searchInput.value = '';
+            renderGallery(personalities);
+            switchView('galleryView');
+        }
 
         init();
     </script>
