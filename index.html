@@ -3,355 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hall of Greats</title>
+    <title>Hall of Great Personalities | Digital Museum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. PREMIUM THEME & VARIABLES --- */
         :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-gold: #fbbf24;
-            --accent-hover: #f59e0b;
+            --gold: #D4AF37;
+            --charcoal: #121212;
+            --slate: #1a1a1a;
         }
-
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
+            background-color: var(--charcoal);
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-
-        /* --- 2. KEYFRAME ANIMATIONS --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* --- 3. HOME PAGE STYLES --- */
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        h1 {
-            color: var(--accent-gold);
-            font-size: 3rem;
-            margin: 0 0 15px 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        #searchBar {
-            width: 100%;
-            max-width: 500px;
-            padding: 15px 25px;
-            border-radius: 30px;
-            border: 2px solid #334155;
-            background: #0f172a;
-            color: white;
-            font-size: 1.1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        #searchBar:focus {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto 60px auto;
-            padding: 0 20px;
-        }
-
-        /* --- 4. CARD ANIMATIONS & DESIGN --- */
-        .card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 25px;
+        h1, h2, .serif { font-family: 'Playfair Display', serif; }
+        
+        .gold-text { color: var(--gold); }
+        .gold-border { border-color: var(--gold); }
+        
+        .personality-card {
+            background: var(--slate);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             cursor: pointer;
-            border-bottom: 4px solid transparent;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            /* Initial state for animation */
-            opacity: 0; 
-            animation: fadeInUp 0.8s ease-out forwards;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
+            border: 1px solid rgba(212, 175, 55, 0.1);
         }
-
-        .card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-bottom: 4px solid var(--accent-gold);
+        .personality-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.3);
         }
+        .view-transition { display: none; opacity: 0; }
+        .active-view { display: block; opacity: 1; }
 
-        .card h3 {
-            color: var(--accent-gold);
-            font-size: 1.5rem;
-            margin-top: 0;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* --- 5. INFORMATION PAGE STYLES --- */
-        #information-page {
-            display: none;
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 40px;
-            background: var(--bg-card);
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-        }
-
-        .back-btn {
-            background: transparent;
-            color: var(--accent-gold);
-            border: 2px solid var(--accent-gold);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 30px;
-        }
-
-        .back-btn:hover {
-            background: var(--accent-gold);
-            color: var(--bg-dark);
-            transform: translateX(-5px);
-        }
-
-        .info-header {
-            border-bottom: 2px solid #334155;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        #info-title {
-            color: var(--accent-gold);
-            font-size: 3.5rem;
-            margin: 0;
-        }
-
-        #info-years {
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            font-style: italic;
-        }
-
-        .timeline-event {
-            background: #0f172a;
-            padding: 15px 20px;
-            border-left: 4px solid var(--accent-gold);
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            transition: transform 0.3s;
-        }
-
-        .timeline-event:hover {
-            transform: translateX(10px);
-        }
-
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--charcoal); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="home-page">
-        <header>
-            <h1>The Hall of Greats</h1>
-            <p style="color: var(--text-muted); margin-bottom: 30px;">Discover the architects of human history</p>
-            <input type="text" id="searchBar" placeholder="Search by name (e.g., Einstein, Gandhi)...">
-        </header>
-        <main id="personGrid" class="grid-container">
-            </main>
-    </div>
-
-    <div id="information-page">
-        <button class="back-btn" onclick="goBack()">← Return to Gallery</button>
-        
-        <div class="info-header">
-            <h1 id="info-title">Name</h1>
-            <p id="info-years">Lifespan</p>
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center bg-opacity-90 bg-[#121212] border-b border-gray-800">
+        <div class="text-2xl font-bold gold-text serif tracking-widest uppercase">The Pantheon</div>
+        <div class="relative w-1/3">
+            <input type="text" id="searchInput" placeholder="Search the Greats..." 
+                class="w-full bg-transparent border-b border-gray-600 focus:border-[#D4AF37] outline-none py-1 px-2 text-sm transition-all">
         </div>
+    </nav>
 
-        <h2 style="color: var(--text-main);">Biography</h2>
-        <p id="info-details" style="line-height: 1.8; color: var(--text-muted); font-size: 1.1rem;"></p>
+    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto">
+        
+        <section id="galleryView" class="view-transition active-view">
+            <header class="mb-16 text-center">
+                <h1 class="text-5xl md:text-7xl mb-4">Hall of Greats</h1>
+                <p class="text-gray-400 italic font-light tracking-wide">"The history of the world is but the biography of great men." — Thomas Carlyle</p>
+            </header>
+            
+            <div id="personalityGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                </div>
+        </section>
 
-        <h2 style="color: var(--text-main); margin-top: 40px;">Key Events</h2>
-        <div id="info-timeline">
-            </div>
-    </div>
+        <section id="bioView" class="view-transition">
+            <button onclick="showGallery()" class="mb-8 flex items-center gap-2 text-sm uppercase tracking-widest gold-text hover:opacity-70 transition-all">
+                ← Back to Gallery
+            </button>
+            <div id="bioContent" class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                </div>
+        </section>
+
+    </main>
 
     <script>
-        // --- 1. THE DEEP DATA (Add up to 100 here) ---
+        // Database of names to fetch (Can easily expand to 100+)
         const personalities = [
-            {
-                id: "mandela",
-                name: "Nelson Mandela",
-                years: "1918 - 2013",
-                summary: "Anti-apartheid revolutionary, political leader, and philanthropist.",
-                details: "Nelson Rolihlahla Mandela was a South African anti-apartheid revolutionary and political leader who served as the first president of South Africa from 1994 to 1999. He was the country's first black head of state and the first elected in a fully representative democratic election. His government focused on dismantling the legacy of apartheid by tackling institutionalized racism and fostering racial reconciliation. Ideologically an African nationalist and socialist, he served as the president of the African National Congress (ANC) party from 1991 to 1997.",
-                events: [
-                    "1944: Joined the African National Congress (ANC).",
-                    "1964: Sentenced to life imprisonment during the Rivonia Trial.",
-                    "1990: Released from prison after 27 years.",
-                    "1993: Awarded the Nobel Peace Prize.",
-                    "1994: Inaugurated as South Africa's first black president."
-                ]
-            },
-            {
-                id: "gandhi",
-                name: "Mahatma Gandhi",
-                years: "1869 - 1948",
-                summary: "Leader of the Indian independence movement against British rule.",
-                details: "Mohandas Karamchand Gandhi was an Indian lawyer, anti-colonial nationalist, and political ethicist, who employed nonviolent resistance to lead the successful campaign for India's independence from British rule, and in turn inspired movements for civil rights and freedom across the world. The honorific Mahātmā (Sanskrit: 'great-souled', 'venerable'), first applied to him in 1914 in South Africa, is now used throughout the world.",
-                events: [
-                    "1893: Thrown off a train in South Africa, sparking his civil rights activism.",
-                    "1915: Returned to India to join the independence movement.",
-                    "1930: Led the famous Salt March protesting the British salt monopoly.",
-                    "1942: Launched the Quit India Movement.",
-                    "1947: India officially achieves independence."
-                ]
-            },
-            {
-                id: "einstein",
-                name: "Albert Einstein",
-                years: "1879 - 1955",
-                summary: "Theoretical physicist widely acknowledged as one of the greatest physicists of all time.",
-                details: "Albert Einstein is best known for developing the theory of relativity, but he also made important contributions to the development of the theory of quantum mechanics. Relativity and quantum mechanics are together the two pillars of modern physics. His mass–energy equivalence formula E = mc2, which arises from relativity theory, has been dubbed 'the world's most famous equation'.",
-                events: [
-                    "1905: Published four groundbreaking papers (his 'Miracle Year').",
-                    "1915: Completed the General Theory of Relativity.",
-                    "1921: Awarded the Nobel Prize in Physics for his explanation of the photoelectric effect.",
-                    "1933: Emigrated to the United States to flee the Nazi regime.",
-                    "1939: Signed a letter to President Roosevelt urging nuclear research."
-                ]
-            },
-            {
-                id: "curie",
-                name: "Marie Curie",
-                years: "1867 - 1934",
-                summary: "Physicist and chemist who conducted pioneering research on radioactivity.",
-                details: "Marie Salomea Skłodowska Curie was a Polish and naturalized-French physicist and chemist. She was the first woman to win a Nobel Prize, the first person and the only woman to win the Nobel Prize twice, and the only person to win the Nobel Prize in two scientific fields. Her husband, Pierre Curie, was a co-winner of her first Nobel Prize, making them the first-ever married couple to win the Nobel Prize and launching the Curie family legacy of five Nobel Prizes.",
-                events: [
-                    "1898: Discovered the elements polonium and radium.",
-                    "1903: Won the Nobel Prize in Physics (shared with Pierre Curie and Henri Becquerel).",
-                    "1906: Took over Pierre's teaching post, becoming the first female professor at the University of Paris.",
-                    "1911: Won the Nobel Prize in Chemistry.",
-                    "1914: Developed mobile radiography units for WWI field hospitals."
-                ]
-            },
-            {
-                id: "lincoln",
-                name: "Abraham Lincoln",
-                years: "1809 - 1865",
-                summary: "16th U.S. President who preserved the Union and abolished slavery.",
-                details: "Abraham Lincoln was an American lawyer and statesman who served as the 16th president of the United States from 1861 until his assassination in 1865. Lincoln led the nation through the American Civil War and succeeded in preserving the Union, abolishing slavery, bolstering the federal government, and modernizing the U.S. economy. He was born into poverty in a log cabin and was raised on the frontier.",
-                events: [
-                    "1860: Elected as the 16th President of the United States.",
-                    "1861: The American Civil War begins.",
-                    "1863: Issued the Emancipation Proclamation and delivered the Gettysburg Address.",
-                    "1864: Re-elected to the presidency.",
-                    "1865: Assassinated by John Wilkes Booth at Ford's Theatre."
-                ]
-            }
+            "Leonardo da Vinci", "Marie Curie", "Albert Einstein", "Nelson Mandela", 
+            "Aristotle", "Ada Lovelace", "Mahatma Gandhi", "Nikola Tesla", 
+            "Maya Angelou", "Galileo Galilei", "Frida Kahlo", "Isaac Newton",
+            "Socrates", "Hypatia", "Martin Luther King Jr.", "Vincent van Gogh"
         ];
 
-        // --- 2. DOM ELEMENTS ---
-        const grid = document.getElementById('personGrid');
-        const searchBar = document.getElementById('searchBar');
-        const homePage = document.getElementById('home-page');
-        const infoPage = document.getElementById('information-page');
+        const grid = document.getElementById('personalityGrid');
+        const searchInput = document.getElementById('searchInput');
 
-        // --- 3. RENDER CARDS WITH STAGGERED ANIMATION ---
-        function displayPeople(data) {
-            grid.innerHTML = ''; // Clear existing
-            
-            data.forEach((person, index) => {
-                // Calculate animation delay for stagger effect
-                const delay = index * 0.1; 
-                
+        // INITIALIZE APP
+        function init() {
+            renderGallery(personalities);
+            setupSearch();
+        }
+
+        function renderGallery(list) {
+            grid.innerHTML = '';
+            list.forEach((name, index) => {
                 const card = document.createElement('div');
-                card.className = 'card';
-                card.style.animationDelay = `${delay}s`; // Apply staggered delay
-                card.onclick = () => openInformation(person.id);
-                
+                card.className = 'personality-card p-8 rounded-sm text-center flex flex-col items-center justify-center min-h-[200px]';
                 card.innerHTML = `
-                    <h3>${person.name}</h3>
-                    <p><strong>${person.years}</strong></p>
-                    <p style="font-size: 0.9em;">${person.summary}</p>
+                    <span class="text-xs gold-text mb-2 uppercase tracking-tighter opacity-60">Entry #${index + 1}</span>
+                    <h3 class="text-xl serif font-semibold">${name}</h3>
+                    <div class="mt-4 w-8 h-[1px] bg-[#D4AF37]"></div>
                 `;
-                
+                card.onclick = () => showBio(name);
                 grid.appendChild(card);
+            });
+
+            gsap.from(".personality-card", {
+                duration: 0.8,
+                y: 30,
+                opacity: 0,
+                stagger: 0.05,
+                ease: "power2.out"
             });
         }
 
-        // --- 4. OPEN DETAILED VIEW WITH ANIMATIONS ---
-        function openInformation(id) {
-            const person = personalities.find(p => p.id === id);
-
-            document.getElementById('info-title').innerText = person.name;
-            document.getElementById('info-years').innerText = person.years;
-            document.getElementById('info-details').innerText = person.details;
-
-            // Generate Timeline Events
-            const timeline = document.getElementById('info-timeline');
-            timeline.innerHTML = person.events.map((event, index) => `
-                <div class="timeline-event" style="animation: slideInRight 0.5s ease forwards; opacity: 0; animation-delay: ${index * 0.15}s;">
-                    ${event}
-                </div>
-            `).join('');
-
-            // Page Transition
-            homePage.style.display = 'none';
-            infoPage.style.display = 'block';
-            infoPage.style.animation = 'fadeInUp 0.6s ease-out';
-            window.scrollTo(0,0); // Scroll to top
+        function setupSearch() {
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = personalities.filter(p => p.toLowerCase().includes(term));
+                renderGallery(filtered);
+            });
         }
 
-        // --- 5. GO BACK TO HOME ---
-        function goBack() {
-            infoPage.style.display = 'none';
-            homePage.style.display = 'block';
-            homePage.style.animation = 'fadeInDown 0.6s ease-out';
-            searchBar.value = ''; // Clear search
-            displayPeople(personalities); // Reset grid
+        async function showBio(name) {
+            // Switch Views
+            switchView('bioView');
+            const bioContent = document.getElementById('bioContent');
+            bioContent.innerHTML = `<div class="col-span-2 text-center py-20 gold-text animate-pulse">Consulting Archives...</div>`;
+
+            try {
+                // Fetch from Wikipedia API
+                const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`);
+                const data = await response.json();
+
+                bioContent.innerHTML = `
+                    <div class="relative group">
+                        <img src="${data.thumbnail ? data.thumbnail.source : 'https://via.placeholder.com/600x800?text=No+Image+Found'}" 
+                             alt="${name}" class="w-full grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl">
+                        <div class="absolute -bottom-4 -right-4 w-full h-full border-2 gold-border -z-10"></div>
+                    </div>
+                    <div>
+                        <h2 class="text-6xl gold-text mb-6">${data.title}</h2>
+                        <p class="text-xl italic text-gray-400 mb-8">${data.description || 'Historical Figure'}</p>
+                        <div class="h-[1px] w-20 bg-[#D4AF37] mb-8"></div>
+                        <p class="leading-relaxed text-gray-300 text-lg mb-8">
+                            ${data.extract}
+                        </p>
+                        <a href="${data.content_urls.desktop.page}" target="_blank" class="px-8 py-3 border gold-border gold-text hover:bg-[#D4AF37] hover:text-black transition-all uppercase text-xs tracking-widest">
+                            Read Full Dossier
+                        </a>
+                    </div>
+                `;
+
+                gsap.from("#bioContent > div", {
+                    x: 50,
+                    opacity: 0,
+                    duration: 1,
+                    stagger: 0.2,
+                    ease: "power3.out"
+                });
+
+            } catch (error) {
+                bioContent.innerHTML = `<p class="col-span-2 text-center">Historical data currently unavailable.</p>`;
+            }
         }
 
-        // --- 6. SEARCH FUNCTIONALITY ---
-        searchBar.addEventListener('keyup', (e) => {
-            const searchString = e.target.value.toLowerCase();
-            const filtered = personalities.filter(p => 
-                p.name.toLowerCase().includes(searchString) || 
-                p.summary.toLowerCase().includes(searchString)
-            );
-            displayPeople(filtered);
-        });
+        function showGallery() {
+            switchView('galleryView');
+        }
 
-        // --- 7. INITIALIZE ---
-        displayPeople(personalities);
+        function switchView(viewId) {
+            document.querySelectorAll('.view-transition').forEach(v => {
+                v.style.display = 'none';
+                v.style.opacity = '0';
+            });
+            const active = document.getElementById(viewId);
+            active.style.display = 'block';
+            gsap.to(active, { opacity: 1, duration: 0.5 });
+        }
+
+        init();
     </script>
 </body>
 </html>
